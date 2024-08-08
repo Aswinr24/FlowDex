@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+### CrediFlow- The Finance Supply Chain
 
-## Getting Started
+Link to PPT / Slides: [https://docs.google.com/presentation/d/18BE7X7MnTkaE48KhTZXJEsm-Hqly9jGO](https://docs.google.com/presentation/d/18BE7X7MnTkaE48KhTZXJEsm-Hqly9jGO/edit?usp=sharing&ouid=112685132944051023680&rtpof=true&sd=true)
 
-First, run the development server:
+#### Problem Statement
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Traditional supply chain finance processes are riddled with inefficiencies, limited transparency, and high costs, fraud and security risks, primarily due to manual, paper-based operations, effective communication between buyers, suppliers, and other stakeholders is challenging, and the involvement of multiple intermediaries. These issues lead to slow processing times, increased error rates, and elevated financing costs. Additionally, the lack of a unified, real-time view of the supply chain and a secure platform for transaction verification fosters a trust deficit among suppliers, buyers, and financial institutions. This mistrust, coupled with frequent payment delays, adversely impacts suppliers' cash flow and financial stability. Ineffective risk management further exacerbates operational disruptions and financial losses.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Our Project CrediFlow aims to solve these problems by leveraging blockchain technology to create a transparent, efficient, and secure supply chain finance ecosystem, improving cash flow, reducing financing costs, and enhancing trust among all participants.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+#### Our Approach / Idea / Solution
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Decentralized supply chain finance solution CrediFlow which leverages blockchain tech to enhance transparency, security, and efficiency in financing supply chain activities. This solution enables suppliers, buyers, and financial institutions to interact on a shared, decentralized ledger, automating processes like invoice financing, dynamic discounting, and trade financing through smart contracts. The main goal is to improve cash flow, reduce financing costs, and increase trust among all participants in the supply chain.
 
-## Learn More
+##### Key Features:
 
-To learn more about Next.js, take a look at the following resources:
+- Ensuring Transparency: Maintain an immutable, transparent ledger of all transactions on the blockchain.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Direct Buyer-Supplier Interaction: Eliminate intermediaries by creating a direct link between buyers and suppliers, streamlining the process and reducing reliance on third parties.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- Automating Transactions: Use smart contracts to automate purchase orders, invoicing, and payments, reducing manual paperwork and errors.
+- Comprehensive Features: Facilitate different use cases like purchase ordering, dynamic discounting, cross-border trading, and supplier risk assessment to optimize supply chain operations and financial management.
 
-## Deploy on Vercel
+- Securing Digital Payments: Implement an escrow system specifically for digital payments (cryptocurrencies), ensuring commitment and mitigating fraud risk.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Facilitating Digital Payments: Enable fast, cost-effective transactions using digital tokens or cryptocurrencies.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- Decentralized Storage: Utilize IPFS (InterPlanetary File System) service- Web3.storage/lighthouse for securely storing and sharing documents and details, ensuring data integrity and availability.
+
+- Web3 Communication Protocol Integration: Use the Web3 Push Protocol to facilitate secure and real-time communication between buyers and suppliers, providing timely notifications and updates directly on the platform.
+
+#### Architecture / WorkFlow
+
+Let us consider an example use case here, PURCHASE ORDERING
+
+![image](https://github.com/user-attachments/assets/2cc049eb-38a8-451d-b577-409c0431c81e)
+
+![image](https://github.com/user-attachments/assets/dd1ccc86-86df-4160-9bdc-934bcc585a38)
+
+#### Tech Stack
+
+- Solidity for writing smart contracts
+
+- Hardhat for testing and deploying smart contracts
+
+- Next js(Typescript) for building the user interface (UI) for the platform.
+
+- Express js for building the API layer of the application
+
+- Wagmi library for interacting with the smart contract functions
+
+- WalletConnect AppKit / Rainbow kit library for wallet connection
+
+- Web3.storage/Lighthouse IPFS storage services
+
+- Push Protocol SDK for establishing a Communication layer between the Stakeholders
