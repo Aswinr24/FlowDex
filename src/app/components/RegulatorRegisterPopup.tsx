@@ -30,7 +30,7 @@ export default function RegulatorRegisterPopup({
         <form>
           <div className="space-y-4">
             <div>
-              <label htmlFor="Name">Phone no:</label>
+              <label htmlFor="Name">Name:</label>
               <Input
                 id="name"
                 value={name}

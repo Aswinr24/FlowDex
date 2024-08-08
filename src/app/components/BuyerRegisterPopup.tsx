@@ -77,7 +77,7 @@ export default function BuyerRegisterPopup({
             </div>
             <div className="flex gap-6">
               <div className="flex flex-col w-1/2 space-y-2 pb-2">
-                <label htmlFor="institutionName">Phone no:</label>
+                <label htmlFor="phoneno">Phone no:</label>
                 <Input
                   id="phoneno"
                   value={phoneno}
@@ -87,7 +87,7 @@ export default function BuyerRegisterPopup({
                 />
               </div>
               <div className="flex flex-col w-1/2 space-y-2">
-                <label htmlFor="institutionId">e-mail :</label>
+                <label htmlFor="email">e-mail :</label>
                 <Input
                   id="email"
                   value={email}

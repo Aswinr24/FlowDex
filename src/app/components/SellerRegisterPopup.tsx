@@ -22,12 +22,13 @@ export default function SellerRegisterPopup({
   onClose,
 }: SellerRegisterPopupProps) {
   const [business, setBusiness] = useState<string>(nameOfBusiness)
-  const [businessType, setBusinessType] = useState<string>('individual')
+  const [businessType, setBusinessType] = useState<string>('')
   const [tinNumber, setTinNumber] = useState<string>('')
   const [documents, setDocuments] = useState<FileList | null>(null)
   const [bankstmt, setBankstmt] = useState<FileList | null>(null)
   const [invoice, setInvoice] = useState<FileList | null>(null)
   const [website, setWebsite] = useState<string>('')
+  const [panno, setPanno] = useState<string>('')
   const [location, setLocation] = useState<string>('')
   const [phoneno, setPhoneno] = useState<string>('')
   const [email, setEmail] = useState<string>('')
@@ -86,7 +87,7 @@ export default function SellerRegisterPopup({
             </div>
             <div className="flex gap-6">
               <div className="flex flex-col w-1/2 space-y-2 pb-2">
-                <label htmlFor="institutionName">Phone no:</label>
+                <label htmlFor="phoneno">Phone no:</label>
                 <Input
                   id="phoneno"
                   value={phoneno}
@@ -96,7 +97,7 @@ export default function SellerRegisterPopup({
                 />
               </div>
               <div className="flex flex-col w-1/2 space-y-2">
-                <label htmlFor="institutionId">e-mail :</label>
+                <label htmlFor="email">e-mail :</label>
                 <Input
                   id="email"
                   value={email}
@@ -145,6 +146,15 @@ export default function SellerRegisterPopup({
                   className="mt-1 bg-yellow-50 border-yellow-300"
                   value={tinNumber}
                   onChange={(e) => setTinNumber(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col w-1/2 space-y-2 pb-2">
+                <Label htmlFor="panNumber">PAN Number</Label>
+                <Input
+                  id="pannNumber"
+                  className="mt-1 bg-yellow-50 border-yellow-300"
+                  value={panno}
+                  onChange={(e) => setPanno(e.target.value)}
                 />
               </div>
               <div className="flex flex-col w-1/2 space-y-2 pb-2">

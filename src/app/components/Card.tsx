@@ -75,7 +75,11 @@ export function CardComp({ type }: CardCompProps) {
           className="bg-yellow-500 hover:bg-amber-400"
           onClick={handleRegisterClick}
         >
-          {type === 'buyer' ? 'Register as a Buyer!' : 'Register as a Seller!'}
+          {type === 'buyer'
+            ? 'Register as a Buyer!'
+            : type === 'seller'
+            ? 'Register as a Seller!'
+            : 'Register'}
         </Button>
       </CardFooter>
       {showPopup &&
