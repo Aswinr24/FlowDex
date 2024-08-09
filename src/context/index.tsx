@@ -22,7 +22,7 @@ createWeb3Modal({
   themeMode: 'dark',
   themeVariables: {
     '--w3m-accent': '#FACC15',
-    '--w3m-color-mix': '#FACC15',
+    '--w3m-color-mix': '#0C0A09',
   },
   enableAnalytics: true, // Optional - defaults to your Cloud configuration
 })

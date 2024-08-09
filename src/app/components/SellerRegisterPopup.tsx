@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -10,7 +10,9 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { useAccount } from 'wagmi'
+import { useAccount, useWriteContract } from 'wagmi'
+import { useRouter } from 'next/navigation'
+import { abi } from '../../../public/stakeholder_abi'
 
 interface SellerRegisterPopupProps {
   nameOfBusiness: string
@@ -24,19 +26,122 @@ export default function SellerRegisterPopup({
   const [business, setBusiness] = useState<string>(nameOfBusiness)
   const [businessType, setBusinessType] = useState<string>('')
   const [tinNumber, setTinNumber] = useState<string>('')
-  const [documents, setDocuments] = useState<FileList | null>(null)
-  const [bankstmt, setBankstmt] = useState<FileList | null>(null)
-  const [invoice, setInvoice] = useState<FileList | null>(null)
+  const [documents, setDocuments] = useState<File | null>(null)
+  const [bankstmt, setBankstmt] = useState<File | null>(null)
+  const [invoice, setInvoice] = useState<File | null>(null)
   const [website, setWebsite] = useState<string>('')
   const [panno, setPanno] = useState<string>('')
   const [location, setLocation] = useState<string>('')
   const [phoneno, setPhoneno] = useState<string>('')
   const [email, setEmail] = useState<string>('')
   const { address, isConnecting, isDisconnected } = useAccount()
+  const router = useRouter()
+  const [txHash, setTxHash] = useState<string | null>(null)
+  const [ishash, setIshash] = useState<boolean>(false)
+  const { data: hash, writeContract } = useWriteContract()
 
-  const handleSubmit = () => {
-    // Implement the form submission logic here
-    onClose()
+  const uploadFileToIPFS = async (file: File) => {
+    const formData = new FormData()
+    formData.append('file', file)
+    const response = await fetch('http://localhost:8080/uploadDocument', {
+      method: 'POST',
+      body: formData,
+    })
+    return await response.json()
+  }
+
+  const uploadTextToServer = async (name: string, text: string) => {
+    const response = await fetch('http://localhost:8080/uploadText', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name, text }),
+    })
+    return await response.json()
+  }
+
+  useEffect(() => {
+    console.log('hee')
+    if (hash) {
+      setTxHash(hash)
+      setIshash(true)
+      setTimeout(() => {
+        setTxHash(null)
+        setIshash(false)
+        router.push('/seller')
+      }, 10000) // 5 seconds
+    }
+  }, [hash])
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    try {
+      let documentHash = ''
+      let bankstmtHash = ''
+      let invoiceHash = ''
+      if (documents) {
+        const result = await uploadFileToIPFS(documents)
+        const data = result.uploadResponse.data
+        console.log(result)
+        documentHash = data.Hash
+      }
+      if (bankstmt) {
+        const result = await uploadFileToIPFS(bankstmt)
+        const data = result.uploadResponse.data
+        bankstmtHash = data.Hash
+      }
+      if (invoice) {
+        const result = await uploadFileToIPFS(invoice)
+        const data = result.uploadResponse.data
+        invoiceHash = data.Hash
+      }
+
+      const documentsJson = {
+        document_hash: documentHash,
+        bankstmt_hash: bankstmtHash,
+        invoice_hash: invoiceHash,
+      }
+      const documentsResponse = await uploadTextToServer(
+        business,
+        JSON.stringify(documentsJson)
+      )
+      const documentsHash = documentsResponse.uploadResponse.data.Hash
+
+      const privateJson = {
+        tinNumber: tinNumber,
+        panno: panno,
+      }
+      const privateDetailsResponse = await uploadTextToServer(
+        business,
+        JSON.stringify(privateJson)
+      )
+      const privateDetailsHash = privateDetailsResponse.uploadResponse.data.Hash
+
+      const publicDetailsJson = {
+        phoneNumber: phoneno,
+        emailAddress: email,
+        websiteURL: website,
+        businessType: businessType,
+        businessLocation: location,
+      }
+      const publicDetailsResponse = await uploadTextToServer(
+        business,
+        JSON.stringify(publicDetailsJson)
+      )
+      const publicDetailsHash = publicDetailsResponse.uploadResponse.data.Hash
+
+      console.log('Public Details Hash:', publicDetailsHash)
+      writeContract({
+        abi,
+        address: '0x11eAC6Bb9C4A319B6c7F40d203444d227f030c1D',
+        functionName: 'registerSupplier',
+        args: [business, publicDetailsHash, privateDetailsHash, documentsHash],
+      })
+      console.log('Submitted')
+    } catch (error) {
+      console.error('Error during submission:', error)
+    }
   }
 
   return (
@@ -45,7 +150,7 @@ export default function SellerRegisterPopup({
         <h2 className="text-2xl font-bold mb-4">
           Register as a Seller / Supplier
         </h2>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div className="flex gap-6">
               <div className="flex flex-col  w-1/2  space-y-2 pb-2">
@@ -116,7 +221,7 @@ export default function SellerRegisterPopup({
                   id="documents"
                   type="file"
                   className="mt-1 bg-yellow-50 border-yellow-300"
-                  onChange={(e) => setDocuments(e.target.files)}
+                  onChange={(e) => setDocuments(e.target.files?.[0] || null)}
                 />
               </div>
               <div className="flex flex-col space-y-2 pb-2">
@@ -125,7 +230,7 @@ export default function SellerRegisterPopup({
                   id="invoice"
                   type="file"
                   className="mt-1 bg-yellow-50 border-yellow-300"
-                  onChange={(e) => setInvoice(e.target.files)}
+                  onChange={(e) => setInvoice(e.target.files?.[0] || null)}
                 />
               </div>
               <div className="flex flex-col space-y-2 pb-2">
@@ -134,7 +239,7 @@ export default function SellerRegisterPopup({
                   id="bankstmt"
                   type="file"
                   className="mt-1 bg-yellow-50 border-yellow-300"
-                  onChange={(e) => setBankstmt(e.target.files)}
+                  onChange={(e) => setBankstmt(e.target.files?.[0] || null)}
                 />
               </div>
             </div>
@@ -192,8 +297,11 @@ export default function SellerRegisterPopup({
             <Button variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button onClick={handleSubmit}>Submit</Button>
+            <Button className="bg-lime-700 hover:bg-amber-500" type="submit">
+              Submit
+            </Button>
           </div>
+          {ishash && <p>Transaction Hash: {txHash}</p>}
         </form>
       </div>
     </div>

@@ -3,18 +3,23 @@ async function main() {
 
   console.log('Deploying contracts with the account:', deployer.address)
 
-  const LandRegistry = await ethers.getContractFactory('LandRegistry')
-  const landRegistry = await LandRegistry.deploy()
+  // const StakeHolders = await ethers.getContractFactory('StakeHolders')
+  // const stakeholders = await StakeHolders.deploy()
 
-  console.log(
-    'LandRegistry contract deployed to:',
-    await landRegistry.getAddress()
+  // console.log(
+  //   'StakeHolders contract deployed to:',
+  //   await stakeholders.getAddress()
+  // )
+
+  const PurchaseOrder = await ethers.getContractFactory('PurchaseOrder')
+  const purchaseOrder = await PurchaseOrder.deploy(
+    '0x11eAC6Bb9C4A319B6c7F40d203444d227f030c1D'
   )
 
-  const LandNFT = await ethers.getContractFactory('LandNFT')
-  const landNFT = await LandNFT.deploy()
-
-  console.log('LandNFT contract deployed to:', await landNFT.getAddress())
+  console.log(
+    'Purchase Order contract deployed to:',
+    await purchaseOrder.getAddress()
+  )
 }
 
 main()

@@ -43,10 +43,20 @@ export function CardComp({ type }: CardCompProps) {
             : 'Regulatory Body'}
         </CardTitle>
         <CardDescription className="text-center text-xl text-yellow-500 font-semibold">
-          {type === 'buyer' ? 'to BUY' : type === 'seller' ? 'to SELL' : ''}
+          {type === 'buyer'
+            ? 'to BUY'
+            : type === 'seller'
+            ? 'to SELL'
+            : 'to regulate and resolve disputes'}
         </CardDescription>
         <div className="flex-row items-center justify-center px-24 pt-4">
-          <img src="./building.png" className="w-28 h-24" />
+          {type === 'buyer' ? (
+            <img src="./buyer.png" className="w-28 h-24" />
+          ) : type === 'seller' ? (
+            <img src="./seller.png" className="w-28 h-24" />
+          ) : (
+            <img src="./regulator.png" className="mt-6 w-28 h-24" />
+          )}
         </div>
       </CardHeader>
       <CardContent>

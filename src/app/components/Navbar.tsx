@@ -6,7 +6,11 @@ export default function Navbar() {
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex mx-6 justify-between items-center h-16">
           <div className="flex items-center pl-16">
-            <a href="/" className="text-xl font-bold text-black">
+            <a
+              href="/"
+              className="text-xl font-bold text-amber-400 flex items-center"
+            >
+              <img src="./trade.png" className="w-8 h-8 mx-2" />
               CrediFlow
             </a>
           </div>
@@ -14,19 +18,19 @@ export default function Navbar() {
             <div className="flex space-x-20">
               <a
                 href="/"
-                className="text-yellow-600 inline-flex items-center text-lg font-medium hover:text-gray-700 transition duration-300 ease-in-out"
+                className="text-yellow-500 inline-flex items-center text-lg font-bold hover:text-gray-700 transition duration-300 ease-in-out"
               >
                 Home
               </a>
               <a
-                href="/issuer"
-                className="text-black inline-flex items-center text-lg font-medium hover:text-gray-700 transition duration-300 ease-in-out"
+                href="/buyer"
+                className="text-black inline-flex items-center text-lg font-bold hover:text-yellow-500 transition duration-300 ease-in-out"
               >
                 Buy
               </a>
               <a
-                href="/student"
-                className="text-black inline-flex items-center text-lg font-medium hover:text-gray-700 transition duration-300 ease-in-out"
+                href="/seller"
+                className="text-black inline-flex items-center text-lg font-bold hover:text-yellow-500 transition duration-300 ease-in-out"
               >
                 Sell
               </a>
