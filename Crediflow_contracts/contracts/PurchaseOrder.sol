@@ -11,15 +11,15 @@ contract PurchaseOrder is ReentrancyGuard{
     struct Order {
         address buyer;
         address supplier;
-        string orderDetailsHash; // IPFS hash for order details
-        string logisticsDetailsHash; // IPFS hash for logistics details
-        string estimateInvoiceHash; // IPFS hash for estimate invoice
-        uint256 totalAmount; // Total amount for the order
-        uint256 escrowAmount; // Escrow amount held in contract
-        uint256 remainingAmount; // Remaining amount to be paid after escrow
-        string estimatedDeliveryDate; // Estimated delivery date provided by the supplier
+        string orderDetailsHash; 
+        string logisticsDetailsHash; 
+        string estimateInvoiceHash; 
+        uint256 totalAmount; 
+        uint256 escrowAmount;
+        uint256 remainingAmount; 
+        string estimatedDeliveryDate; 
         OrderStatus status;
-        string finalInvoiceHash; // IPFS hash for final invoice
+        string finalInvoiceHash; 
     }
 
     StakeHolders private stakeHoldersContract;
@@ -55,7 +55,6 @@ contract PurchaseOrder is ReentrancyGuard{
         stakeHoldersContract = StakeHolders(_stakeHoldersContractAddress);
     }
 
-    // Buyer requests a Purchase Order with the details
     function requestOrder(address _supplier, string memory _orderDetailsHash ) public {
         require(stakeHoldersContract.walletToStakeholder(_supplier) == StakeHolders.StakeholderType.Supplier, "Supplier not registered");
         
@@ -77,12 +76,10 @@ contract PurchaseOrder is ReentrancyGuard{
         emit OrderRequested(orderCount, msg.sender, _supplier);
     }
 
-    // Function for the supplier to retrieve the order details hash
     function getOrderDetailsHash(uint256 _orderId) public view onlySupplier(_orderId) returns (string memory) {
         return orders[_orderId].orderDetailsHash;
     }
 
-    // Supplier accepts the Purchase Order and provides the estimated delivery date and estimate invoice
     function acceptOrder(uint256 _orderId, string memory _estimateInvoiceHash, uint256 _totalAmount, string memory _estimatedDeliveryDate) public onlySupplier(_orderId) {
         Order storage order = orders[_orderId];
         require(order.status == OrderStatus.Created, "Order not in Created status");
@@ -97,7 +94,6 @@ contract PurchaseOrder is ReentrancyGuard{
         emit OrderAccepted(_orderId, msg.sender, order.buyer);
     }
 
-    // Buyer pays part of the money held in escrow to create the Purchase Order
     function payEscrow(uint256 _orderId) public payable onlyBuyer(_orderId) {
         Order storage order = orders[_orderId];
         require(order.status == OrderStatus.Accepted, "Order not in Accepted status");
@@ -107,7 +103,6 @@ contract PurchaseOrder is ReentrancyGuard{
         order.status = OrderStatus.Confirmed;
     }
 
-    // Supplier updates order details during the logistics process
     function updateLogistics(uint256 _orderId, string memory _logisticsDetailsHash) public onlySupplier(_orderId) {
         Order storage order = orders[_orderId];
         require(order.status == OrderStatus.Confirmed, "Initial Payment Not Done Yet");
@@ -125,7 +120,6 @@ contract PurchaseOrder is ReentrancyGuard{
         emit OrderDelivered(_orderId, msg.sender);
     }
 
-    // Buyer verifies delivery and pays the remaining amount
     function completeOrder(uint256 _orderId) public payable onlyBuyer(_orderId) {
         Order storage order = orders[_orderId];
         require(order.status == OrderStatus.Delivered, "Order not in Delivered status");
@@ -146,7 +140,6 @@ contract PurchaseOrder is ReentrancyGuard{
         return (order.estimateInvoiceHash, order.estimatedDeliveryDate, order.totalAmount, order.escrowAmount);
     }
 
-    // Retrieve the final invoice hash after delivery confirmation
     function getFinalInvoiceDetails(uint256 _orderId) public view onlyBuyer(_orderId) returns (string memory, uint256) {
         Order storage order = orders[_orderId];
         require(order.status == OrderStatus.Delivered, "Order not in Delivered status");
@@ -162,7 +155,6 @@ contract PurchaseOrder is ReentrancyGuard{
         emit OrderDisputed(_orderId, order.buyer, order.supplier);
     }
 
-    // Arbiter resolves the dispute
     function resolveDispute(uint256 _orderId, bool _refundBuyer) public onlyArbiter {
         Order storage order = orders[_orderId];
         require(order.status == OrderStatus.Disputed, "Order not in Disputed status");
