@@ -13,6 +13,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { useAccount, useWriteContract } from 'wagmi'
 import { useRouter } from 'next/navigation'
 import { abi } from '../../../public/stakeholder_abi'
+const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL
 
 interface SellerRegisterPopupProps {
   nameOfBusiness: string
@@ -43,7 +44,7 @@ export default function SellerRegisterPopup({
   const uploadFileToIPFS = async (file: File) => {
     const formData = new FormData()
     formData.append('file', file)
-    const response = await fetch('http://localhost:8080/uploadDocument', {
+    const response = await fetch(`${SERVER_URL}/uploadDocument`, {
       method: 'POST',
       body: formData,
     })
@@ -51,7 +52,7 @@ export default function SellerRegisterPopup({
   }
 
   const uploadTextToServer = async (name: string, text: string) => {
-    const response = await fetch('http://localhost:8080/uploadText', {
+    const response = await fetch(`${SERVER_URL}/uploadText`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

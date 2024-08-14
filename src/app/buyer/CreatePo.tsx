@@ -9,6 +9,7 @@ import { ethers } from 'ethers'
 import { abi } from '../../../public/purchaseorder_abi'
 
 type CryptoAddress = `0x${string}`
+const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL
 
 interface CreatePoProps {
   onClose: () => void
@@ -58,7 +59,7 @@ const CreatePo: React.FC<CreatePoProps> = ({
   }
 
   const uploadTextToServer = async (name: string, text: string) => {
-    const response = await fetch('http://localhost:8080/uploadText', {
+    const response = await fetch(`${SERVER_URL}/uploadText`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -49,8 +49,9 @@ app.post('/uploadDocument', upload.single('file'), async (req, res) => {
 
 app.post('/uploadText', async (req, res) => {
   console.log(req.body)
+  const text = req.body.text
+  let text2
   try {
-    // Attempt to parse the text to check if it is JSON
     const parsedText = JSON.parse(text)
 
     text2 = JSON.stringify(parsedText)

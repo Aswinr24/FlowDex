@@ -19,6 +19,7 @@ interface BuyerRegisterPopupProps {
   nameOfBusiness: string
   onClose: () => void
 }
+const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL
 
 export default function BuyerRegisterPopup({
   nameOfBusiness,
@@ -42,7 +43,7 @@ export default function BuyerRegisterPopup({
   const uploadFileToIPFS = async (file: File) => {
     const formData = new FormData()
     formData.append('file', file)
-    const response = await fetch('http://localhost:8080/uploadDocument', {
+    const response = await fetch(`${SERVER_URL}/uploadDocument`, {
       method: 'POST',
       body: formData,
     })
@@ -50,7 +51,7 @@ export default function BuyerRegisterPopup({
   }
 
   const uploadTextToServer = async (name: string, text: string) => {
-    const response = await fetch('http://localhost:8080/uploadText', {
+    const response = await fetch(`${SERVER_URL}/uploadText`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
