@@ -154,7 +154,7 @@ export default function SellerRegisterPopup({
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div className="flex gap-6">
-              <div className="flex flex-col  w-1/2  space-y-2 pb-2">
+              <div className="flex flex-col  w-1/2  space-y-2 pb-1">
                 <Label htmlFor="businessName">Name Of Your Business</Label>
                 <Input
                   id="businessName"
@@ -214,7 +214,7 @@ export default function SellerRegisterPopup({
               </div>
             </div>
             <div className="flex gap-6">
-              <div className="flex flex-col space-y-2 pb-2">
+              <div className="flex flex-col space-y-2 pb-1">
                 <Label htmlFor="documents">
                   Business Registration Documents
                 </Label>
@@ -225,7 +225,7 @@ export default function SellerRegisterPopup({
                   onChange={(e) => setDocuments(e.target.files?.[0] || null)}
                 />
               </div>
-              <div className="flex flex-col space-y-2 pb-2">
+              <div className="flex flex-col space-y-2 pb-1">
                 <Label htmlFor="invoice">An Invoice Copy</Label>
                 <Input
                   id="invoice"
@@ -234,7 +234,7 @@ export default function SellerRegisterPopup({
                   onChange={(e) => setInvoice(e.target.files?.[0] || null)}
                 />
               </div>
-              <div className="flex flex-col space-y-2 pb-2">
+              <div className="flex flex-col space-y-2 pb-1">
                 <Label htmlFor="bankstmt">Bank Statement</Label>
                 <Input
                   id="bankstmt"
@@ -245,7 +245,7 @@ export default function SellerRegisterPopup({
               </div>
             </div>
             <div className="flex gap-6">
-              <div className="flex flex-col w-1/2 space-y-2 pb-2">
+              <div className="flex flex-col w-1/2 space-y-2 pb-0.5">
                 <Label htmlFor="tinNumber">TIN Number</Label>
                 <Input
                   id="tinNumber"
@@ -254,7 +254,7 @@ export default function SellerRegisterPopup({
                   onChange={(e) => setTinNumber(e.target.value)}
                 />
               </div>
-              <div className="flex flex-col w-1/2 space-y-2 pb-2">
+              <div className="flex flex-col w-1/2 space-y-2 pb-0.5">
                 <Label htmlFor="panNumber">PAN Number</Label>
                 <Input
                   id="pannNumber"
@@ -263,7 +263,7 @@ export default function SellerRegisterPopup({
                   onChange={(e) => setPanno(e.target.value)}
                 />
               </div>
-              <div className="flex flex-col w-1/2 space-y-2 pb-2">
+              <div className="flex flex-col w-1/2 space-y-2 pb-0.5">
                 <Label htmlFor="website">Website</Label>
                 <Input
                   id="website"
@@ -274,7 +274,7 @@ export default function SellerRegisterPopup({
                 />
               </div>
             </div>
-            <div>
+            <div className="pt-0">
               <Label htmlFor="address">Location / Address</Label>
               <Textarea
                 id="address"
@@ -285,20 +285,25 @@ export default function SellerRegisterPopup({
               />
             </div>
             <div className="flex flex-col space-y-2">
-              <label htmlFor="walletaddress">Wallet Address:</label>
+              <label htmlFor="walletaddress" className="text-sm">
+                Wallet Address:
+              </label>
               <Input
                 id="walletaddress"
                 value={address}
-                disabled
-                className="bg-white text-black"
+                readOnly
+                className="bg-yellow-100 cursor-default border-yellow-300 text-black"
               />
             </div>
           </div>
           <div className="flex justify-end space-x-4 mt-6">
-            <Button variant="outline" onClick={onClose}>
+            <Button variant="outline" className="rounded-lg" onClick={onClose}>
               Cancel
             </Button>
-            <Button className="bg-lime-700 hover:bg-amber-500" type="submit">
+            <Button
+              className="bg-lime-600 hover:bg-amber-500 rounded-lg"
+              type="submit"
+            >
               Submit
             </Button>
           </div>

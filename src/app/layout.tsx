@@ -2,6 +2,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { headers } from 'next/headers'
 import { Inter } from 'next/font/google'
+import { Toaster } from '@/components/ui/toaster'
 
 import { cookieToInitialState } from 'wagmi'
 
@@ -25,6 +26,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} bg-lime-200`}>
         <AppKitProvider initialState={initialState}>{children}</AppKitProvider>
+        <Toaster />
       </body>
     </html>
   )

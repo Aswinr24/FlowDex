@@ -33,7 +33,7 @@ export function CardComp({ type }: CardCompProps) {
   }
 
   return (
-    <Card className="w-[350px] bg-lime-200">
+    <Card className="w-[350px] rounded-3xl bg-lime-200 border border-lime-600 ">
       <CardHeader>
         <CardTitle className="text-center text-2xl">
           {type === 'buyer'

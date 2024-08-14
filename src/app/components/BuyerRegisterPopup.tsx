@@ -14,6 +14,8 @@ import { Textarea } from '@/components/ui/textarea'
 import { useAccount, useWriteContract } from 'wagmi'
 import { FormEvent } from 'react'
 import { abi } from '../../../public/stakeholder_abi'
+import { Toast } from '@/components/ui/toast'
+import { useToast } from '@/components/ui/use-toast'
 
 interface BuyerRegisterPopupProps {
   nameOfBusiness: string
@@ -36,9 +38,8 @@ export default function BuyerRegisterPopup({
   const [email, setEmail] = useState<string>('')
   const { address, isConnecting, isDisconnected } = useAccount()
   const router = useRouter()
-  const [txHash, setTxHash] = useState<string | null>(null)
-  const [ishash, setIshash] = useState<boolean>(false)
   const { data: hash, writeContract } = useWriteContract()
+  const { toast } = useToast()
 
   const uploadFileToIPFS = async (file: File) => {
     const formData = new FormData()
@@ -64,13 +65,14 @@ export default function BuyerRegisterPopup({
   useEffect(() => {
     console.log('hee')
     if (hash) {
-      setTxHash(hash)
-      setIshash(true)
-      setTimeout(() => {
-        setTxHash(null)
-        setIshash(false)
-        router.push('/buyer')
-      }, 5000) // 5 seconds
+      toast({
+        title: 'Transaction Success!',
+        description: `Transaction Hash: ${hash}`,
+        className: 'bg-lime-300 border-lime-500 pt-4 pb-4',
+      }),
+        setTimeout(() => {
+          router.push('/buyer')
+        }, 5000) // 5 seconds
     }
   }, [hash])
 
@@ -140,7 +142,7 @@ export default function BuyerRegisterPopup({
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div className="flex gap-6">
-              <div className="flex flex-col  w-1/2  space-y-2 pb-2">
+              <div className="flex flex-col w-1/2 space-y-2 pb-0.5">
                 <Label htmlFor="businessName">Name Of Your Business</Label>
                 <Input
                   id="businessName"
@@ -171,8 +173,8 @@ export default function BuyerRegisterPopup({
                 </Select>
               </div>
             </div>
-            <div className="flex gap-6">
-              <div className="flex flex-col w-1/2 space-y-2 pb-2">
+            <div className="flex gap-6 text-sm">
+              <div className="flex flex-col w-1/2 space-y-2 pb-1">
                 <label htmlFor="phoneno">Phone no:</label>
                 <Input
                   id="phoneno"
@@ -196,7 +198,7 @@ export default function BuyerRegisterPopup({
             {businessType !== 'individual' && (
               <>
                 <div className="flex gap-6">
-                  <div className="flex flex-col space-y-2 pb-2">
+                  <div className="flex flex-col space-y-2 pb-1">
                     <Label htmlFor="documents">
                       Proof of Business Documents
                     </Label>
@@ -209,7 +211,7 @@ export default function BuyerRegisterPopup({
                       }
                     />
                   </div>
-                  <div className="flex flex-col space-y-2 pb-2">
+                  <div className="flex flex-col space-y-2 pb-1">
                     <Label htmlFor="cashFlow">Cash Flow / Credit History</Label>
                     <Input
                       id="cashFlow"
@@ -220,7 +222,7 @@ export default function BuyerRegisterPopup({
                   </div>
                 </div>
                 <div className="flex gap-6">
-                  <div className="flex flex-col w-1/2 space-y-2 pb-2">
+                  <div className="flex flex-col w-1/2 space-y-2 pb-0">
                     <Label htmlFor="tinNumber">TIN Number</Label>
                     <Input
                       id="tinNumber"
@@ -229,7 +231,7 @@ export default function BuyerRegisterPopup({
                       onChange={(e) => setTinNumber(e.target.value)}
                     />
                   </div>
-                  <div className="flex flex-col w-1/2 space-y-2 pb-2">
+                  <div className="flex flex-col w-1/2 space-y-2 pb-0">
                     <Label htmlFor="website">Website</Label>
                     <Input
                       id="website"
@@ -251,22 +253,28 @@ export default function BuyerRegisterPopup({
               />
             </div>
             <div className="flex flex-col space-y-2">
-              <label htmlFor="walletaddress">Wallet Address:</label>
+              <label htmlFor="walletaddress" className="text-sm">
+                Wallet Address:
+              </label>
               <Input
                 id="walletaddress"
                 value={address}
-                disabled
-                className="bg-white text-black"
+                readOnly
+                className="bg-yellow-100 cursor-default text-gray-700 border-yellow-300"
               />
             </div>
           </div>
           <div className="flex justify-end space-x-4 mt-6">
-            <Button variant="outline" onClick={onClose}>
+            <Button variant="outline" className="rounded-lg" onClick={onClose}>
               Cancel
             </Button>
-            <button type="submit">Submit</button>
+            <Button
+              className="bg-lime-600 hover:bg-amber-500 rounded-lg"
+              type="submit"
+            >
+              Submit
+            </Button>
           </div>
-          {ishash && <p>Transaction Hash: {txHash}</p>}
         </form>
       </div>
     </div>
