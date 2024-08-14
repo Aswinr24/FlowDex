@@ -26,7 +26,7 @@ export default function RegulatorRegisterPopup({
   return (
     <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-yellow-200 p-6 rounded-lg shadow-lg w-full max-w-2xl">
-        <h2 className="text-2xl font-bold mb-4">Register as a Buyer</h2>
+        <h2 className="text-2xl font-bold mb-4">Register as a Regulator</h2>
         <form>
           <div className="space-y-4">
             <div>

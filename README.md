@@ -27,8 +27,6 @@ Decentralized supply chain finance solution CrediFlow which leverages blockchain
 
 - Decentralized Storage: Utilize IPFS (InterPlanetary File System) service- Web3.storage/lighthouse for securely storing and sharing documents and details, ensuring data integrity and availability.
 
-- Web3 Communication Protocol Integration: Use the Web3 Push Protocol to facilitate secure and real-time communication between buyers and suppliers, providing timely notifications and updates directly on the platform.
-
 #### Architecture / WorkFlow
 
 Let us consider an example use case here, PURCHASE ORDERING
