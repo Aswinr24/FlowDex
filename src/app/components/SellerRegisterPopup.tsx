@@ -38,6 +38,7 @@ export default function SellerRegisterPopup({
   const [location, setLocation] = useState<string>('')
   const [phoneno, setPhoneno] = useState<string>('')
   const [email, setEmail] = useState<string>('')
+  const [loading, setLoading] = useState<boolean>(false)
   const { address, isConnecting, isDisconnected } = useAccount()
   const router = useRouter()
   const { data: hash, writeContract } = useWriteContract()
@@ -66,8 +67,9 @@ export default function SellerRegisterPopup({
 
   useEffect(() => {
     if (hash) {
+      setLoading(true)
       const shortHash = `${hash.slice(0, 8)}...${hash.slice(-8)}`
-      const etherscanLink = `https://sepolia.etherscan.io/tx/${hash}`
+      const etherscanLink = `https://cardona-zkevm.polygonscan.com/tx/${hash}`
       toast({
         title: 'Transaction Success!',
         description: `Hash: ${shortHash}`,
@@ -84,12 +86,14 @@ export default function SellerRegisterPopup({
       }),
         setTimeout(() => {
           router.push('/seller')
+          setLoading(false)
         }, 5000) // 5 seconds
     }
   }, [hash])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setLoading(true)
     try {
       let documentHash = ''
       let bankstmtHash = ''
@@ -97,7 +101,6 @@ export default function SellerRegisterPopup({
       if (documents) {
         const result = await uploadFileToIPFS(documents)
         const data = result.uploadResponse.data
-        console.log(result)
         documentHash = data.Hash
       }
       if (bankstmt) {
@@ -144,8 +147,7 @@ export default function SellerRegisterPopup({
         JSON.stringify(publicDetailsJson)
       )
       const publicDetailsHash = publicDetailsResponse.uploadResponse.data.Hash
-
-      console.log('Public Details Hash:', publicDetailsHash)
+      setLoading(false)
       writeContract({
         abi,
         address: contractAddress,
@@ -316,8 +318,13 @@ export default function SellerRegisterPopup({
             <Button
               className="bg-lime-600 hover:bg-amber-500 rounded-lg"
               type="submit"
+              disabled={loading}
             >
-              Submit
+              {loading ? (
+                <span className="loader inline-block w-5 h-5 border-l-2 border-b-2 border-t-2 border-white rounded-full animate-spin"></span>
+              ) : (
+                'Submit'
+              )}
             </Button>
           </div>
         </form>

@@ -39,6 +39,7 @@ export default function BuyerRegisterPopup({
   const [location, setLocation] = useState<string>('')
   const [phoneno, setPhoneno] = useState<string>('')
   const [email, setEmail] = useState<string>('')
+  const [loading, setLoading] = useState<boolean>(false)
   const { address, isConnecting, isDisconnected } = useAccount()
   const router = useRouter()
   const { data: hash, writeContract } = useWriteContract()
@@ -66,10 +67,10 @@ export default function BuyerRegisterPopup({
   }
 
   useEffect(() => {
-    console.log(contractAddress)
     if (hash) {
+      setLoading(true)
       const shortHash = `${hash.slice(0, 8)}...${hash.slice(-8)}`
-      const etherscanLink = `https://sepolia.etherscan.io/tx/${hash}`
+      const etherscanLink = `https://cardona-zkevm.polygonscan.com/tx/${hash}`
       toast({
         title: 'Transaction Success!',
         description: `Hash: ${shortHash}`,
@@ -86,19 +87,20 @@ export default function BuyerRegisterPopup({
       }),
         setTimeout(() => {
           router.push('/buyer')
+          setLoading(true)
         }, 5000) // 5 seconds
     }
   }, [hash])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setLoading(true)
     try {
       let documentHash = ''
       let cashflowHash = ''
       if (documents) {
         const result = await uploadFileToIPFS(documents)
         const data = result.uploadResponse.data
-        console.log(result)
         documentHash = data.Hash
       }
       if (cashFlow) {
@@ -135,8 +137,7 @@ export default function BuyerRegisterPopup({
         JSON.stringify(publicDetailsJson)
       )
       const publicDetailsHash = publicDetailsResponse.uploadResponse.data.Hash
-
-      console.log('Public Details Hash:', publicDetailsHash)
+      setLoading(true)
       writeContract({
         abi,
         address: contractAddress,
@@ -274,7 +275,7 @@ export default function BuyerRegisterPopup({
                 id="walletaddress"
                 value={address}
                 readOnly
-                className="bg-yellow-100 cursor-default text-gray-700 border-yellow-300"
+                className="bg-yellow-100 cursor-default text-gray-600 border-yellow-300"
               />
             </div>
           </div>
@@ -285,8 +286,13 @@ export default function BuyerRegisterPopup({
             <Button
               className="bg-lime-600 hover:bg-amber-500 rounded-lg"
               type="submit"
+              disabled={loading}
             >
-              Submit
+              {loading ? (
+                <span className="loader inline-block w-5 h-5 border-l-2 border-b-2 border-t-2 border-white rounded-full animate-spin"></span>
+              ) : (
+                'Submit'
+              )}
             </Button>
           </div>
         </form>
