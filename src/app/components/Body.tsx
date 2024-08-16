@@ -19,10 +19,14 @@ const Body = () => {
           </div>
         </div>
       </main>
-      <div className="flex px-36 gap-20 pb-20">
+      <div className="flex px-36 justify-center gap-20 pb-20">
         <CardComp type="buyer" />
         <CardComp type="seller" />
+        <CardComp type="financier" />
+      </div>
+      <div className="flex px-36 gap-20 pb-20">
         <CardComp type="regulator" />
+        <CardComp type="logistics" />
       </div>
     </main>
   )

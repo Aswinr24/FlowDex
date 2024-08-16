@@ -16,7 +16,7 @@ import SellerRegisterPopup from './SellerRegisterPopup'
 import RegulatorRegisterPopup from './RegulatorRegisterPopup'
 
 interface CardCompProps {
-  type: 'buyer' | 'seller' | 'regulator'
+  type: 'buyer' | 'seller' | 'regulator' | 'financier' | 'logistics'
 }
 
 export function CardComp({ type }: CardCompProps) {
@@ -40,6 +40,10 @@ export function CardComp({ type }: CardCompProps) {
             ? 'I am here'
             : type === 'seller'
             ? 'I am here'
+            : type === 'financier'
+            ? 'I am here'
+            : type === 'logistics'
+            ? 'I am here'
             : 'Regulatory Body'}
         </CardTitle>
         <CardDescription className="text-center text-xl text-yellow-500 font-semibold">
@@ -47,6 +51,10 @@ export function CardComp({ type }: CardCompProps) {
             ? 'to BUY'
             : type === 'seller'
             ? 'to SELL'
+            : type === 'financier'
+            ? 'to provide FINANCE'
+            : type === 'logistics'
+            ? 'to provider LOGISTICS'
             : 'to regulate and resolve disputes'}
         </CardDescription>
         <div className="flex-row items-center justify-center px-24 pt-4">
@@ -82,13 +90,15 @@ export function CardComp({ type }: CardCompProps) {
       </CardContent>
       <CardFooter className="flex items-center justify-center">
         <Button
-          className="bg-yellow-500 hover:bg-amber-400"
+          className="bg-yellow-500 hover:bg-amber-500"
           onClick={handleRegisterClick}
         >
           {type === 'buyer'
             ? 'Register as a Buyer!'
             : type === 'seller'
             ? 'Register as a Seller!'
+            : type === 'financier'
+            ? 'Register as a Financier'
             : 'Register'}
         </Button>
       </CardFooter>

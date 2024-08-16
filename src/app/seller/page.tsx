@@ -7,9 +7,11 @@ import {
   useWriteContract,
 } from 'wagmi'
 import { Log } from 'ethers'
-import { abi } from '../../../public/purchaseorder_abi'
+import { abi } from '../../../public/stakeholder_abi'
 import OrderCard from './OrderCard'
 import Navbar from '../components/Navbar'
+import Web3 from 'web3'
+import { ethers } from 'ethers'
 
 interface Order {
   orderId: number
@@ -19,7 +21,7 @@ interface Order {
 export default function SellerPage() {
   const { address: supplierAddress } = useAccount()
   const [orders, setOrders] = useState<Order[]>([])
-  const contractAddress = '0x80d8BFA8e63E3D4162a1F8ccFb58b624Fa0c8111'
+  const contractAddress = '0x11eAC6Bb9C4A319B6c7F40d203444d227f030c1D'
 
   useWatchContractEvent({
     address: contractAddress,
@@ -37,6 +39,36 @@ export default function SellerPage() {
     },
   })
 
+  useEffect(() => {
+    const listenToOrderRequestedEvent = async () => {
+      try {
+        if (typeof window.ethereum !== 'undefined') {
+          const provider = new ethers.WebSocketProvider(window.ethereum)
+          const contract = new ethers.Contract(contractAddress, abi, provider)
+          console.log('Listening to OrderRequested event', contract)
+
+          // contract.on('OrderRequested', (orderCount, buyer, supplier) => {
+          //   console.log('Hi')
+          //   console.log('Order Requested Event:', {
+          //     orderCount,
+          //     buyer,
+          //     supplier,
+          //   })
+          //   // You can handle the event data here, e.g., update your UI or state
+          // })
+          contract.on('BuyerRegistered', () => {
+            console.log('event')
+          })
+          contract.on('BuyerRegistered', (buyer, buyerType, message) => {
+            console.log('event')
+          })
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    listenToOrderRequestedEvent()
+  }, [])
   return (
     <main>
       <Navbar />

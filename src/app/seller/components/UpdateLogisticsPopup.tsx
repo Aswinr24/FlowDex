@@ -9,6 +9,9 @@ interface UpdateLogisticsPopupProps {
   onClose: () => void
 }
 
+const contractAddress = process.env
+  .NEXT_PUBLIC_CONTRACT2_ADDRESS as CryptoAddress
+
 const UpdateLogisticsPopup: React.FC<UpdateLogisticsPopupProps> = ({
   orderId,
   onClose,

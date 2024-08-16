@@ -4,7 +4,7 @@ pragma solidity ^0.8.20;
 import "./StakeHolders.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-contract PurchaseOrder is ReentrancyGuard{
+contract PurchaseOrder is ReentrancyGuard {
 
     enum OrderStatus { Created, Accepted, Confirmed, Dispatched, Delivered, Completed, Disputed }
 
@@ -12,14 +12,14 @@ contract PurchaseOrder is ReentrancyGuard{
         address buyer;
         address supplier;
         string orderDetailsHash; 
-        string logisticsDetailsHash; 
-        string estimateInvoiceHash; 
-        uint256 totalAmount; 
-        uint256 escrowAmount;
+        string logisticsDetailsHash;
+        string estimateInvoiceHash;
+        uint256 totalAmount;
+        uint256 escrowAmount; 
         uint256 remainingAmount; 
         string estimatedDeliveryDate; 
         OrderStatus status;
-        string finalInvoiceHash; 
+        string finalInvoiceHash;
     }
 
     StakeHolders private stakeHoldersContract;
@@ -33,6 +33,11 @@ contract PurchaseOrder is ReentrancyGuard{
     event OrderDelivered(uint256 indexed orderId, address indexed supplier);
     event OrderCompleted(uint256 indexed orderId, address indexed buyer, address indexed supplier, uint256 totalAmount);
     event OrderDisputed(uint256 indexed orderId, address indexed buyer, address indexed supplier);
+
+    modifier onlyBuyerType() {
+        require(stakeHoldersContract.walletToStakeholder(msg.sender) == StakeHolders.StakeholderType.Buyer, "Only buyers can perform this action");
+        _;
+    }
 
     modifier onlyBuyer(uint256 _orderId) {
         require(stakeHoldersContract.walletToStakeholder(msg.sender) == StakeHolders.StakeholderType.Buyer, "Only buyers can perform this action");
@@ -55,7 +60,7 @@ contract PurchaseOrder is ReentrancyGuard{
         stakeHoldersContract = StakeHolders(_stakeHoldersContractAddress);
     }
 
-    function requestOrder(address _supplier, string memory _orderDetailsHash ) public {
+    function requestOrder(address _supplier, string memory _orderDetailsHash ) public onlyBuyerType{
         require(stakeHoldersContract.walletToStakeholder(_supplier) == StakeHolders.StakeholderType.Supplier, "Supplier not registered");
         
         orderCount++;
@@ -98,8 +103,6 @@ contract PurchaseOrder is ReentrancyGuard{
         Order storage order = orders[_orderId];
         require(order.status == OrderStatus.Accepted, "Order not in Accepted status");
         require(msg.value == order.escrowAmount, "Incorrect escrow amount");
-
-        // Payment is held in the contract as escrow
         order.status = OrderStatus.Confirmed;
     }
 
@@ -132,8 +135,7 @@ contract PurchaseOrder is ReentrancyGuard{
         emit OrderCompleted(_orderId, order.buyer, order.supplier, order.totalAmount);
     }
 
-    // Retrieve the estimate invoice hash, delivery date, total amount, and escrow amount after order acceptance
-    function getOrderEstimateDetails(uint256 _orderId) public view returns (string memory, string memory, uint256, uint256) {
+    function getOrderEstimateDetails(uint256 _orderId) public view onlyBuyer(_orderId) returns (string memory, string memory, uint256, uint256) {
         Order storage order = orders[_orderId];
         require(order.status == OrderStatus.Accepted, "Order not in Accepted status");
 
@@ -145,6 +147,21 @@ contract PurchaseOrder is ReentrancyGuard{
         require(order.status == OrderStatus.Delivered, "Order not in Delivered status");
         return (order.finalInvoiceHash, order.remainingAmount);
     }
+
+    function getAllOrders() public view returns (uint256[] memory, address[] memory, address[] memory) {
+        uint256[] memory orderIds = new uint256[](orderCount);
+        address[] memory buyers = new address[](orderCount);
+        address[] memory suppliers = new address[](orderCount);
+
+        for (uint256 i = 1; i <= orderCount; i++) {
+            orderIds[i - 1] = i;
+            buyers[i - 1] = orders[i].buyer;
+            suppliers[i - 1] = orders[i].supplier;
+        }
+
+        return (orderIds, buyers, suppliers);
+    }
+
 
     function raiseDispute(uint256 _orderId) public {
         Order storage order = orders[_orderId];
@@ -166,4 +183,9 @@ contract PurchaseOrder is ReentrancyGuard{
         }
         order.status = OrderStatus.Completed;
     }
+
+    function getOrderStatus(uint256 _orderId) public view returns (OrderStatus) {
+    return orders[_orderId].status;
+    }
+
 }

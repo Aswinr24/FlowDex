@@ -7,8 +7,10 @@ import {
 import { Button } from '@/components/ui/button'
 import { ethers } from 'ethers'
 import { abi } from '../../../public/purchaseorder_abi'
+import { useToast } from '@/components/ui/use-toast'
 
-type CryptoAddress = `0x${string}`
+const contractAddress = process.env
+  .NEXT_PUBLIC_CONTRACT2_ADDRESS as CryptoAddress
 const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL
 
 interface CreatePoProps {
@@ -31,7 +33,6 @@ const CreatePo: React.FC<CreatePoProps> = ({
     supplierWalletAddress: supplierWalletAddress,
     supplierName: supplierName,
   })
-  const [txHash, setTxHash] = useState<string | null>(null)
   const [isTransactionSuccess, setIsTransactionSuccess] =
     useState<boolean>(false)
   const { data: hash, writeContract } = useWriteContract()
@@ -39,16 +40,35 @@ const CreatePo: React.FC<CreatePoProps> = ({
   const { data, isLoading, isError } = useWaitForTransactionReceipt({
     hash: hash,
   })
+  const { toast } = useToast()
 
   useEffect(() => {
+    if (hash) {
+      const shortHash = `${hash.slice(0, 8)}...${hash.slice(-8)}`
+      const etherscanLink = `https://sepolia.etherscan.io/tx/${hash}`
+      toast({
+        title: 'Transaction Success!',
+        description: `Hash: ${shortHash}`,
+        className: 'bg-lime-300 border-lime-500 pt-4 pl-4 pb-4',
+        action: (
+          <a
+            href={etherscanLink}
+            target="_blank"
+            className="text-lime-700 bg-yellow-200 mt-1 py-2 px-2 rounded-lg text-sm text-center font-semibold hover:text-lime-800 hover:bg-yellow-100"
+          >
+            View Transaction
+          </a>
+        ),
+      })
+    }
     if (data?.logs) {
       alert(`Purchase order requested successfully!`)
       setIsTransactionSuccess(true)
       setTimeout(() => {
         setIsTransactionSuccess(false)
-      }, 5000) // 5 seconds
+      }, 5000)
     }
-  }, [data])
+  }, [data, hash])
 
   const handleChange = (e: React.ChangeEvent<HTMLElement>) => {
     const { name, value } = e.target as HTMLInputElement | HTMLTextAreaElement
@@ -91,7 +111,7 @@ const CreatePo: React.FC<CreatePoProps> = ({
     try {
       writeContract({
         abi,
-        address: '0x80d8BFA8e63E3D4162a1F8ccFb58b624Fa0c8111',
+        address: contractAddress,
         functionName: 'requestOrder',
         args: [supplierWalletAddress, orderDetailsHash],
       })
@@ -102,7 +122,7 @@ const CreatePo: React.FC<CreatePoProps> = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-lime-200 p-8 rounded-lg shadow-lg max-w-xl w-full">
+      <div className="bg-lime-300 p-8 rounded-lg shadow-lg max-w-xl w-full">
         <h2 className="text-xl font-bold mb-4">Create Purchase Order</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="mb-4">
@@ -155,7 +175,7 @@ const CreatePo: React.FC<CreatePoProps> = ({
               id="userWalletAddress"
               name="userWalletAddress"
               value={address || ''}
-              className="w-full p-2 border bg-lime-100 border-lime-300 rounded"
+              className="w-full p-2 border bg-lime-100 border-lime-300 rounded cursor-default"
               readOnly
             />
           </div>
@@ -172,7 +192,7 @@ const CreatePo: React.FC<CreatePoProps> = ({
               name="supplierWalletAddress"
               value={formData.supplierWalletAddress}
               onChange={handleChange}
-              className="w-full p-2 border bg-lime-100 border-lime-300 rounded"
+              className="w-full p-2 border bg-lime-100 border-lime-300 rounded cursor-default"
               readOnly
             />
           </div>
@@ -186,7 +206,7 @@ const CreatePo: React.FC<CreatePoProps> = ({
               name="supplierName"
               value={formData.supplierName}
               onChange={handleChange}
-              className="w-full p-2 border bg-lime-100 border-lime-300 rounded"
+              className="w-full p-2 border bg-lime-100 border-lime-300 rounded cursor-default"
               readOnly
             />
           </div>

@@ -19,12 +19,15 @@ interface SupplierData {
   publicDetailsHash: string
 }
 
+const contractAddress = process.env
+  .NEXT_PUBLIC_CONTRACT1_ADDRESS as CryptoAddress
+
 const SellerCard: React.FC<SellerCardProps> = ({ walletAddress }) => {
   const [supplierData, setSupplierData] = useState<SupplierData | null>(null)
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false)
   const result = useReadContract({
     abi,
-    address: '0x11eAC6Bb9C4A319B6c7F40d203444d227f030c1D',
+    address: contractAddress,
     functionName: 'getSupplier',
     args: [walletAddress],
   })

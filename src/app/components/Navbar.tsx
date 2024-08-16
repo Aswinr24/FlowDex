@@ -5,7 +5,7 @@ export default function Navbar() {
     <nav className="bg-lime-700 py-2 shadow-xl fixed w-full bg-opacity-90">
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex mx-6 justify-between items-center h-16">
-          <div className="flex items-center pl-16">
+          <div className="flex items-center pl-10">
             <a
               href="/"
               className="text-xl font-bold text-amber-400 flex items-center"
@@ -14,7 +14,7 @@ export default function Navbar() {
               CrediFlow
             </a>
           </div>
-          <div className="flex-1 flex justify-center ml-10">
+          <div className="flex justify-center">
             <div className="flex space-x-20">
               <a
                 href="/"
@@ -36,7 +36,7 @@ export default function Navbar() {
               </a>
             </div>
           </div>
-          <div className="flex items-center">
+          <div className="flex items-center pl-10">
             <w3m-button />
           </div>
         </div>

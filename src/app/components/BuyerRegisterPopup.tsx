@@ -16,12 +16,15 @@ import { FormEvent } from 'react'
 import { abi } from '../../../public/stakeholder_abi'
 import { Toast } from '@/components/ui/toast'
 import { useToast } from '@/components/ui/use-toast'
+type CryptoAddress = `0x${string}`
 
 interface BuyerRegisterPopupProps {
   nameOfBusiness: string
   onClose: () => void
 }
 const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL
+const contractAddress = process.env
+  .NEXT_PUBLIC_CONTRACT1_ADDRESS as CryptoAddress
 
 export default function BuyerRegisterPopup({
   nameOfBusiness,
@@ -63,12 +66,23 @@ export default function BuyerRegisterPopup({
   }
 
   useEffect(() => {
-    console.log('hee')
+    console.log(contractAddress)
     if (hash) {
+      const shortHash = `${hash.slice(0, 8)}...${hash.slice(-8)}`
+      const etherscanLink = `https://sepolia.etherscan.io/tx/${hash}`
       toast({
         title: 'Transaction Success!',
-        description: `Transaction Hash: ${hash}`,
-        className: 'bg-lime-300 border-lime-500 pt-4 pb-4',
+        description: `Hash: ${shortHash}`,
+        className: 'bg-lime-300 border-lime-500 pt-4 pl-4 pb-4',
+        action: (
+          <a
+            href={etherscanLink}
+            target="_blank"
+            className="text-lime-700 bg-yellow-200 mt-1 py-2 px-2 rounded-lg text-sm text-center font-semibold hover:text-lime-800 hover:bg-yellow-100"
+          >
+            View Transaction
+          </a>
+        ),
       }),
         setTimeout(() => {
           router.push('/buyer')
@@ -125,7 +139,7 @@ export default function BuyerRegisterPopup({
       console.log('Public Details Hash:', publicDetailsHash)
       writeContract({
         abi,
-        address: '0x11eAC6Bb9C4A319B6c7F40d203444d227f030c1D',
+        address: contractAddress,
         functionName: 'registerBuyer',
         args: [business, publicDetailsHash, privateDetailsHash, documentsHash],
       })

@@ -8,6 +8,9 @@ interface AcceptOrderPopupProps {
   onClose: () => void
 }
 
+const contractAddress = process.env
+  .NEXT_PUBLIC_CONTRACT2_ADDRESS as CryptoAddress
+
 const AcceptOrderPopup: React.FC<AcceptOrderPopupProps> = ({
   orderId,
   onClose,

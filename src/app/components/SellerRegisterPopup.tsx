@@ -13,7 +13,10 @@ import { Textarea } from '@/components/ui/textarea'
 import { useAccount, useWriteContract } from 'wagmi'
 import { useRouter } from 'next/navigation'
 import { abi } from '../../../public/stakeholder_abi'
+import { useToast } from '@/components/ui/use-toast'
 const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL
+const contractAddress = process.env
+  .NEXT_PUBLIC_CONTRACT1_ADDRESS as CryptoAddress
 
 interface SellerRegisterPopupProps {
   nameOfBusiness: string
@@ -37,9 +40,8 @@ export default function SellerRegisterPopup({
   const [email, setEmail] = useState<string>('')
   const { address, isConnecting, isDisconnected } = useAccount()
   const router = useRouter()
-  const [txHash, setTxHash] = useState<string | null>(null)
-  const [ishash, setIshash] = useState<boolean>(false)
   const { data: hash, writeContract } = useWriteContract()
+  const { toast } = useToast()
 
   const uploadFileToIPFS = async (file: File) => {
     const formData = new FormData()
@@ -63,15 +65,26 @@ export default function SellerRegisterPopup({
   }
 
   useEffect(() => {
-    console.log('hee')
     if (hash) {
-      setTxHash(hash)
-      setIshash(true)
-      setTimeout(() => {
-        setTxHash(null)
-        setIshash(false)
-        router.push('/seller')
-      }, 10000) // 5 seconds
+      const shortHash = `${hash.slice(0, 8)}...${hash.slice(-8)}`
+      const etherscanLink = `https://sepolia.etherscan.io/tx/${hash}`
+      toast({
+        title: 'Transaction Success!',
+        description: `Hash: ${shortHash}`,
+        className: 'bg-lime-300 border-lime-500 pt-4 pl-4 pb-4',
+        action: (
+          <a
+            href={etherscanLink}
+            target="_blank"
+            className="text-lime-700 bg-yellow-200 mt-1 py-2 px-2 rounded-lg text-sm text-center font-semibold hover:text-lime-800 hover:bg-yellow-100"
+          >
+            View Transaction
+          </a>
+        ),
+      }),
+        setTimeout(() => {
+          router.push('/seller')
+        }, 5000) // 5 seconds
     }
   }, [hash])
 
@@ -135,7 +148,7 @@ export default function SellerRegisterPopup({
       console.log('Public Details Hash:', publicDetailsHash)
       writeContract({
         abi,
-        address: '0x11eAC6Bb9C4A319B6c7F40d203444d227f030c1D',
+        address: contractAddress,
         functionName: 'registerSupplier',
         args: [business, publicDetailsHash, privateDetailsHash, documentsHash],
       })
@@ -292,7 +305,7 @@ export default function SellerRegisterPopup({
                 id="walletaddress"
                 value={address}
                 readOnly
-                className="bg-yellow-100 cursor-default border-yellow-300 text-black"
+                className="bg-yellow-100 cursor-default border-yellow-300 text-gray-600"
               />
             </div>
           </div>
@@ -307,7 +320,6 @@ export default function SellerRegisterPopup({
               Submit
             </Button>
           </div>
-          {ishash && <p>Transaction Hash: {txHash}</p>}
         </form>
       </div>
     </div>

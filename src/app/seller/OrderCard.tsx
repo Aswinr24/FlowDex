@@ -15,6 +15,9 @@ interface OrderCardProps {
   buyerAddress: string
 }
 
+const contractAddress = process.env
+  .NEXT_PUBLIC_CONTRACT2_ADDRESS as CryptoAddress
+
 const OrderCard: React.FC<OrderCardProps> = ({ orderId, buyerAddress }) => {
   const [orderDetailsHash, setOrderDetailsHash] = useState<string | null>(null)
   const [logisticsDetails, setLogisticsDetails] = useState<string>('')
@@ -24,9 +27,6 @@ const OrderCard: React.FC<OrderCardProps> = ({ orderId, buyerAddress }) => {
   const [isConfirmDeliveryPopupOpen, setIsConfirmDeliveryPopupOpen] =
     useState(false)
   const { data: hash, writeContract } = useWriteContract()
-
-  // Contract address should be replaced with the actual contract address
-  const contractAddress = '0x80d8BFA8e63E3D4162a1F8ccFb58b624Fa0c8111'
 
   const { data: orderHash } = useReadContract({
     abi,
