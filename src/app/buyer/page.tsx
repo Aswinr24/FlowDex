@@ -5,6 +5,8 @@ import { useReadContract } from 'wagmi'
 import { abi } from '../../../public/stakeholder_abi'
 import SellerCard from './SellerCard'
 import Sidebar from './Sidebar'
+const contractAddress = process.env
+  .NEXT_PUBLIC_CONTRACT1_ADDRESS as CryptoAddress
 interface SupplierData {
   name: string
   publicDetailsHash: string
@@ -15,7 +17,7 @@ function useSuppliers() {
 
   const result = useReadContract({
     abi,
-    address: '0x11eAC6Bb9C4A319B6c7F40d203444d227f030c1D',
+    address: contractAddress,
     functionName: 'getAllSuppliers',
   })
 

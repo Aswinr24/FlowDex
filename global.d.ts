@@ -3,3 +3,4 @@ interface Window {
   }
 
 type CryptoAddress = `0x${string}`
+type OrdersData = [BigInt[], string[], string[]]

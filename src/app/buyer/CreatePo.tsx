@@ -33,9 +33,8 @@ const CreatePo: React.FC<CreatePoProps> = ({
     supplierWalletAddress: supplierWalletAddress,
     supplierName: supplierName,
   })
-  const [isTransactionSuccess, setIsTransactionSuccess] =
-    useState<boolean>(false)
   const { data: hash, writeContract } = useWriteContract()
+  const [loading, setLoading] = useState<boolean>(false)
 
   const { data, isLoading, isError } = useWaitForTransactionReceipt({
     hash: hash,
@@ -45,7 +44,7 @@ const CreatePo: React.FC<CreatePoProps> = ({
   useEffect(() => {
     if (hash) {
       const shortHash = `${hash.slice(0, 8)}...${hash.slice(-8)}`
-      const etherscanLink = `https://sepolia.etherscan.io/tx/${hash}`
+      const etherscanLink = `https://cardona-zkevm.polygonscan.com/tx/${hash}`
       toast({
         title: 'Transaction Success!',
         description: `Hash: ${shortHash}`,
@@ -62,11 +61,14 @@ const CreatePo: React.FC<CreatePoProps> = ({
       })
     }
     if (data?.logs) {
-      alert(`Purchase order requested successfully!`)
-      setIsTransactionSuccess(true)
-      setTimeout(() => {
-        setIsTransactionSuccess(false)
-      }, 5000)
+      setLoading(false)
+      toast({
+        title: 'Purchase Order Request Success!',
+        description: `Purchase Order Request to ${supplierName} initiated successfully`,
+        className: 'bg-lime-300 border-lime-500 pt-4 pl-4 pb-4',
+        duration: 5000,
+      })
+      onClose()
     }
   }, [data, hash])
 
@@ -91,21 +93,17 @@ const CreatePo: React.FC<CreatePoProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setLoading(true)
 
-    // Convert formData to JSON and compute its hash
-    const jsonData = JSON.stringify({
+    const jsonData = {
       itemName: formData.itemName,
       quantity: formData.quantity,
       shippingAddress: formData.shippingAddress,
-    })
+    }
 
     const privateDetailsResponse = await uploadTextToServer(
       supplierName,
       JSON.stringify(jsonData)
-    )
-    console.log(
-      'Private details hash:',
-      privateDetailsResponse.uploadResponse.data.Hash
     )
     const orderDetailsHash = privateDetailsResponse.uploadResponse.data.Hash
     try {
@@ -215,15 +213,17 @@ const CreatePo: React.FC<CreatePoProps> = ({
               Cancel
             </Button>
             <Button
+              className="bg-lime-700 hover:bg-lime-600 rounded-lg"
               type="submit"
-              className="bg-lime-700 text-white py-2 px-4 rounded-lg hover:bg-lime-600 transition"
+              disabled={loading}
             >
-              Submit
+              {loading ? (
+                <span className="loader inline-block w-5 h-5 border-l-2 border-b-2 border-t-2 border-white rounded-full animate-spin"></span>
+              ) : (
+                'Submit'
+              )}
             </Button>
           </div>
-          {isTransactionSuccess && (
-            <div>Purchase Order Request Successfull!</div>
-          )}
         </form>
       </div>
     </div>
