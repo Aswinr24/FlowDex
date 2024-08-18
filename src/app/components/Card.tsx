@@ -61,9 +61,13 @@ export function CardComp({ type }: CardCompProps) {
           {type === 'buyer' ? (
             <img src="./buyer.png" className="w-28 h-24" />
           ) : type === 'seller' ? (
-            <img src="./seller.png" className="w-28 h-24" />
+            <img src="./trading.png" className="w-28 h-24" />
+          ) : type === 'regulator' ? (
+            <img src="./regulator.png" className="w-28 mt-6 h-24" />
+          ) : type === 'financier' ? (
+            <img src="./bank.png" className="w-28 mt-10 h-24" />
           ) : (
-            <img src="./regulator.png" className="mt-6 w-28 h-24" />
+            <img src="./logistics.png" className="w-28 mt-10 h-24" />
           )}
         </div>
       </CardHeader>

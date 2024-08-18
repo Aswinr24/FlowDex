@@ -10,7 +10,7 @@ const Body = () => {
           </h1>
           <div className="flex items-center justify-center lg:mx-80 lg:pl-2">
             <h3 className="my-2 text-md text-yellow-500">
-              CrediFlow is a decentralized platform designed to simplify and
+              Flowdex is a decentralized platform designed to simplify and
               secure transactions between buyers and suppliers. By leveraging
               blockchain technology, it enhances transparency, reduces fraud,
               and automates key processes such as purchase ordering, dynamic
@@ -24,7 +24,7 @@ const Body = () => {
         <CardComp type="seller" />
         <CardComp type="financier" />
       </div>
-      <div className="flex px-36 gap-20 pb-20">
+      <div className="flex px-36 justify-center gap-20 pb-20">
         <CardComp type="regulator" />
         <CardComp type="logistics" />
       </div>

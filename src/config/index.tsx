@@ -25,13 +25,13 @@ export const metadata = {
 
 // Create wagmiConfig
 const chains = [
-  mainnet,
-  sepolia,
-  arbitrum,
+  // mainnet,
+  // sepolia,
+  // arbitrum,
   polygonZkEvmCardona,
   polygon,
-  polygonMumbai,
-  filecoinCalibration,
+  // polygonMumbai,
+  // filecoinCalibration,
 ] as const
 export const config = defaultWagmiConfig({
   chains,

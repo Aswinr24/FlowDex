@@ -48,8 +48,6 @@ const OrderCard: React.FC<OrderCardProps> = ({ orderId, buyerAddress }) => {
     if (orderHash) {
       const hash = orderHash as string
       setOrderDetailsHash(hash)
-
-      // Fetch the details from IPFS
       const fetchOrderDetails = async () => {
         try {
           const response = await fetch(
