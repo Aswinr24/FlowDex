@@ -19,7 +19,7 @@ const Footer = () => {
           <div></div>
           <div className="px-10 flex justify-end">
             <a
-              href="https://github.com/Aswinr24/FlowDex_UI"
+              href="https://github.com/Aswinr24/FlowDex"
               target="_blank"
               rel="noopener noreferrer"
             >

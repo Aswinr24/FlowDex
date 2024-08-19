@@ -41,8 +41,8 @@ export default function Page() {
     <main>
       <Navbar />
       <Sidebar />
-      <main className="pt-20 ml-20">
-        <div className="flex pt-20 px-36 gap-20 pb-20">
+      <main className="pt-36 ml-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 px-36 pb-10">
           {suppliers.map((address) => (
             <SellerCard key={address} walletAddress={address} />
           ))}

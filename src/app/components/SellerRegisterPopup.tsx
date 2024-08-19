@@ -195,13 +195,13 @@ export default function SellerRegisterPopup({
                       Wholesale Distributor
                     </SelectItem>
                     <SelectItem value="sme">Suppliers</SelectItem>
-                    <SelectItem value="individual">
+                    <SelectItem value="agricultural_producers">
                       Agricultural Producers
                     </SelectItem>
-                    <SelectItem value="individual">
+                    <SelectItem value="artisians">
                       Artisans and Small-Scale Producers
                     </SelectItem>
-                    <SelectItem value="individual">Others</SelectItem>
+                    <SelectItem value="others">Others</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

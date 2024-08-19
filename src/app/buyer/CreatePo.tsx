@@ -173,7 +173,7 @@ const CreatePo: React.FC<CreatePoProps> = ({
               id="userWalletAddress"
               name="userWalletAddress"
               value={address || ''}
-              className="w-full p-2 border bg-lime-100 border-lime-300 rounded cursor-default"
+              className="w-full p-2 border text-gray-600 bg-lime-100 border-lime-300 rounded cursor-default"
               readOnly
             />
           </div>
@@ -190,7 +190,7 @@ const CreatePo: React.FC<CreatePoProps> = ({
               name="supplierWalletAddress"
               value={formData.supplierWalletAddress}
               onChange={handleChange}
-              className="w-full p-2 border bg-lime-100 border-lime-300 rounded cursor-default"
+              className="w-full p-2 border bg-lime-100 text-gray-600 border-lime-300 rounded cursor-default"
               readOnly
             />
           </div>
@@ -204,7 +204,7 @@ const CreatePo: React.FC<CreatePoProps> = ({
               name="supplierName"
               value={formData.supplierName}
               onChange={handleChange}
-              className="w-full p-2 border bg-lime-100 border-lime-300 rounded cursor-default"
+              className="w-full p-2 border bg-lime-100 text-gray-600 border-lime-300 rounded cursor-default"
               readOnly
             />
           </div>
